@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="n8Y-Di-6aW">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Video View Controller-->
+        <scene sceneID="wQg-tq-qST">
+            <objects>
+                <viewController storyboardIdentifier="videoVc" id="whP-gf-Uak" customClass="YZVideoViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="uEw-UM-LJ8"/>
+                        <viewControllerLayoutGuide type="bottom" id="Mvr-aV-6Um"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="TpU-gO-2f1">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="x8J-lw-fS7">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="211"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="x8J-lw-fS7" secondAttribute="height" multiplier="16:9" id="04W-ws-h8q"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6NE-40-Vmy">
+                                <rect key="frame" x="40.5" y="247" width="88" height="31"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="播放">
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="didClickPlayBtn:" destination="whP-gf-Uak" eventType="touchUpInside" id="Fda-wg-p73"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KK8-B1-2aj">
+                                <rect key="frame" x="143.5" y="247" width="88" height="31"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="88" id="BPW-M1-222"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="暂停">
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="didClickPauseBtn:" destination="whP-gf-Uak" eventType="touchUpInside" id="Hqk-1H-ja9"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i7a-Cj-XK5">
+                                <rect key="frame" x="246.5" y="247" width="88" height="31"/>
+                                <color key="backgroundColor" systemColor="systemGray6Color"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="画中画">
+                                    <color key="baseForegroundColor" systemColor="labelColor"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="didClickPipBtn:" destination="whP-gf-Uak" eventType="touchUpInside" id="1b9-m4-uCQ"/>
+                                </connections>
+                            </button>
+                            <progressView opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="sLs-kl-X0T">
+                                <rect key="frame" x="0.0" y="211" width="375" height="4"/>
+                                <color key="progressTintColor" red="1" green="0.2156862745" blue="0.37254901959999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </progressView>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="sLs-kl-X0T" firstAttribute="centerX" secondItem="x8J-lw-fS7" secondAttribute="centerX" id="0Xs-tG-sbf"/>
+                            <constraint firstItem="i7a-Cj-XK5" firstAttribute="centerY" secondItem="KK8-B1-2aj" secondAttribute="centerY" id="AJN-Lm-V8h"/>
+                            <constraint firstItem="x8J-lw-fS7" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="HKD-xb-WFv"/>
+                            <constraint firstItem="6NE-40-Vmy" firstAttribute="centerY" secondItem="KK8-B1-2aj" secondAttribute="centerY" id="KlS-oG-41N"/>
+                            <constraint firstItem="x8J-lw-fS7" firstAttribute="width" secondItem="TpU-gO-2f1" secondAttribute="width" id="Vma-Ev-rtU"/>
+                            <constraint firstItem="sLs-kl-X0T" firstAttribute="top" secondItem="x8J-lw-fS7" secondAttribute="bottom" id="XaR-i8-f3M"/>
+                            <constraint firstItem="x8J-lw-fS7" firstAttribute="top" secondItem="uEw-UM-LJ8" secondAttribute="bottom" id="ZG4-Sd-U6Q"/>
+                            <constraint firstItem="KK8-B1-2aj" firstAttribute="leading" secondItem="6NE-40-Vmy" secondAttribute="trailing" constant="15" id="e6h-KP-dEL"/>
+                            <constraint firstItem="i7a-Cj-XK5" firstAttribute="width" secondItem="KK8-B1-2aj" secondAttribute="width" id="eBd-DW-59d"/>
+                            <constraint firstItem="KK8-B1-2aj" firstAttribute="top" secondItem="x8J-lw-fS7" secondAttribute="bottom" constant="36" id="euV-w5-uLC"/>
+                            <constraint firstItem="sLs-kl-X0T" firstAttribute="width" secondItem="x8J-lw-fS7" secondAttribute="width" id="g2r-ef-lo7"/>
+                            <constraint firstItem="KK8-B1-2aj" firstAttribute="centerX" secondItem="TpU-gO-2f1" secondAttribute="centerX" id="kaV-pJ-kvA"/>
+                            <constraint firstItem="6NE-40-Vmy" firstAttribute="width" secondItem="KK8-B1-2aj" secondAttribute="width" id="mvb-Ah-BU8"/>
+                            <constraint firstItem="i7a-Cj-XK5" firstAttribute="leading" secondItem="KK8-B1-2aj" secondAttribute="trailing" constant="15" id="sDd-9u-eH5"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="wWw-Fc-PuL"/>
+                    <connections>
+                        <outlet property="playerView" destination="x8J-lw-fS7" id="eSW-Nn-OcO"/>
+                        <outlet property="progressView" destination="sLs-kl-X0T" id="SVQ-So-zXF"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tc2-Qw-aMS" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1249" y="410"/>
+        </scene>
+        <!--视频列表-->
+        <scene sceneID="tDt-Gs-lKb">
+            <objects>
+                <tableViewController id="iru-Tu-FDM" customClass="YZVideoListViewController" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="9wf-Cm-veN">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="videoCell" id="5Lm-wl-mEd">
+                                <rect key="frame" x="0.0" y="44.5" width="375" height="43.5"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="5Lm-wl-mEd" id="O8S-kK-L7t">
+                                    <rect key="frame" x="0.0" y="0.0" width="350.5" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="iru-Tu-FDM" id="Dg7-VC-QLo"/>
+                            <outlet property="delegate" destination="iru-Tu-FDM" id="57W-t1-NTA"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" title="视频列表" id="Gw6-1D-bJY"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YeO-dm-E25" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="260" y="410"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="AD4-VE-prK">
+            <objects>
+                <navigationController id="n8Y-Di-6aW" customClass="YZNavigationController" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="YrW-dJ-p3r">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="iru-Tu-FDM" kind="relationship" relationship="rootViewController" id="lQB-N1-dj6"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="oyd-ks-IST" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-673" y="410"/>
+        </scene>
+    </scenes>
+    <resources>
+        <systemColor name="labelColor">
+            <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

@@ -1,0 +1,16 @@
+PODS:
+  - YZVideoPip (0.1.0)
+
+DEPENDENCIES:
+  - YZVideoPip (from `../`)
+
+EXTERNAL SOURCES:
+  YZVideoPip:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  YZVideoPip: 2d96aaeea87d303f9e4aa437d70ba42d9365eb09
+
+PODFILE CHECKSUM: 7b062ec40499acdc48d052cfe24b2f7a95d49728
+
+COCOAPODS: 1.11.2
