@@ -2,7 +2,7 @@
 //  YZVideoListViewController.m
 //  YZVideoPip
 //
-//  Created by hyz on 2022/8/29.
+//  Created by zone1026 on 2022/8/29.
 //  Copyright © 2022 zone1026. All rights reserved.
 //
 

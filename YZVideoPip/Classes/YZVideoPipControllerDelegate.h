@@ -2,7 +2,8 @@
 //  YZVideoPipControllerDelegate.h
 //  YZVideoPip
 //
-//  Created by hyz on 2022/8/30.
+//  Created by zone1026 on 2022/8/30.
+//  Copyright © 2022 zone1026. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -56,6 +57,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// @abstract 画中画视频已播放结束
 /// @param pip 画中画控制对象
 - (void)videoPipPlayEnd:(YZVideoPipController *)pip;
+
+/// @abstract 画中画视频将要开启预加载
+/// @param pip 画中画控制对象
+- (void)videoWillPreloadVideo:(YZVideoPipController *)pip;
+
+/// @abstract 画中画视频已经完成预加载
+/// @param pip 画中画控制对象
+- (void)videoDidPreloadVideo:(YZVideoPipController *)pip;
 
 @end
 

@@ -7,7 +7,7 @@
 //
 
 #import "YZVideoViewController.h"
-#import <AVKit/AVKit.h>
+#import <MediaPlayer/MediaPlayer.h>
 #import "YZVideoPipController.h"
 
 /// bool枚举值
@@ -62,7 +62,10 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
     self.view.backgroundColor = [UIColor whiteColor];
     self.progressView.progress = 0.0f;
     self.boolValue = YZVideoBoolValueNormal;
+    // 开启远程控制
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
     
+    [self showIndicatorView];
     // 创建视频播放器
     self.player = [AVPlayer playerWithURL:self.videoUrl];
     if (@available(iOS 10.0, *)) { //当播放基于文件的媒体时, 逐渐下载的内容
@@ -82,7 +85,7 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
     [self registerMessageNotification];
     
     // 初始化画中画对象
-    self.videoPip = [[YZVideoPipController alloc] initWithContainterLayer:self.view.layer withPipDelegate:self];
+    self.videoPip = [[YZVideoPipController alloc] initWithContainterLayer:self.playerView.layer withPipDelegate:self];
     
     // 记录当前视图的导航控制器
     self.naviController = self.navigationController;
@@ -99,6 +102,7 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
 }
 
 - (void)dealloc {
+    NSLog(@"%s", __func__);
     [self removeMessageNotification];
 }
 
@@ -134,6 +138,8 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
     
     NSTimeInterval currentTime = CMTimeGetSeconds(self.player.currentTime);
     self.progressView.progress = currentTime / self.duration;
+    // 设置锁屏状态下屏幕显示的播放信息
+    [self configVideoPlayingCenterInfo:currentTime];
 }
 
 #pragma mark - Public Methods
@@ -156,6 +162,7 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
 
 #pragma mark - Private Methods
 
+/// 显示指示视图
 - (void)showIndicatorView {
     [self hideIndicatorView];
     self.indicatorView.center = self.view.center;
@@ -163,6 +170,7 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
     [self.indicatorView startAnimating];
 }
 
+/// 隐藏指示视图
 - (void)hideIndicatorView {
     if (_indicatorView == nil) return;
     
@@ -172,15 +180,41 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
     [self.indicatorView removeFromSuperview];
 }
 
+/// 设置锁屏状态下屏幕显示的播放信息
+- (void)configVideoPlayingCenterInfo:(NSTimeInterval)currentTime {
+    if (self.boolValue == YZVideoBoolValueStartPip) {
+        [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:nil];
+        return;
+    }
+    
+    // 播放信息字典
+    NSMutableDictionary *info = [NSMutableDictionary dictionary];
+    // 标题
+    [info setObject:self.videoUrl.lastPathComponent forKey:MPMediaItemPropertyTitle];
+    // 视频作者
+    [info setObject:([[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"]) forKey:MPMediaItemPropertyArtist];
+    // 播放倍速
+    [info setObject:@(self.player.rate) forKey:MPNowPlayingInfoPropertyPlaybackRate];
+    // 播放时长
+    [info setObject:@(currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+    // 总时长
+    [info setObject:@(self.duration) forKey:MPMediaItemPropertyPlaybackDuration];
+    
+    // 设置正在播放的信息
+    [[MPNowPlayingInfoCenter defaultCenter] setNowPlayingInfo:info];
+}
+
 #pragma mark - YZVideoPipControllerDelegate
 
 /// 收到开启画中画的请求，准备装载画中画程序
 - (void)loadVideoPip:(YZVideoPipController *)pip {
+    NSLog(@"收到开启画中画的请求，准备装载画中画程序");
     [self showIndicatorView];
 }
 
 /// 即将开启画中画
 - (void)videoWillStartPip:(YZVideoPipController *)pip {
+    NSLog(@"即将开启画中画");
     self.boolValue = YZVideoBoolValueStartPip;
     [self hideIndicatorView];
     [self.navigationController popViewControllerAnimated:YES];
@@ -188,13 +222,13 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
 
 /// 已经开启画中画
 - (void)videoDidStartPip:(YZVideoPipController *)pip {
-    
+    NSLog(@"已经开启画中画");
 }
 
 /// 开启画中画失败
 - (void)videoStartPip:(YZVideoPipController *)pip withFailedError:(NSError *)error {
     [self hideIndicatorView];
-    NSLog(@"pip error : %@", error);
+    NSLog(@"pip开启出错 : %@", error);
     
     if (error == nil) return;
     
@@ -215,11 +249,13 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
 
 /// 即将关闭画中画
 - (void)videoWillStopPip:(YZVideoPipController *)pip {
-    
+    NSLog(@"即将关闭画中画");
 }
 
 /// 已经关闭画中画
 - (void)videoDidStopPip:(YZVideoPipController *)pip {
+    NSLog(@"已经关闭画中画");
+    [self hideIndicatorView];
     if (self.boolValue == YZVideoBoolValueRestoredPip) return;
     
     [self destroyVideoPlayVc:YES];
@@ -230,11 +266,13 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
 
 /// 关闭画中画且恢复播放界面
 - (void)videoRestorePip:(YZVideoPipController *)pip withCompletionHandler:(nonnull void (^)(BOOL restored))completionHandler {
+    NSLog(@"关闭画中画且恢复播放界面");
+    [self showIndicatorView];
     self.boolValue = YZVideoBoolValueRestoredPip;
     
     if ([self.naviController.viewControllers containsObject:self] == NO) {
         // 继续使用页面播放器播放视频
-        [self.player seekToTime:(CMTimeMakeWithSeconds(pip.currentTime, 60)) completionHandler:^(BOOL finished) {
+        [self.player seekToTime:(CMTimeMakeWithSeconds(pip.currentTime, 600)) completionHandler:^(BOOL finished) {
             [self didClickPlayBtn:nil];
         }];
         // 将页面push到导航控制视图中
@@ -248,27 +286,42 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
 
 /// 画中画视频将要开始播放
 - (void)videoWillStartPlay:(YZVideoPipController *)pip {
-    
+    NSLog(@"画中画视频将要开始播放");
 }
 
 /// 画中画视频已经开始播放
 - (void)videoDidStartPlay:(YZVideoPipController *)pip {
-    
+    NSLog(@"画中画视频已经开始播放");
 }
 
 /// 画中画视频已播放结束
 - (void)videoPipPlayEnd:(YZVideoPipController *)pip {
+    NSLog(@"画中画视频已播放结束");
     [self.videoPip replacePipVideo:self.videoUrl withSeekTime:0.0f];
+}
+
+- (void)videoWillPreloadVideo:(YZVideoPipController *)pip {
+    NSLog(@"将要启动画中画视频预加载功能");
+}
+
+- (void)videoDidPreloadVideo:(YZVideoPipController *)pip {
+    NSLog(@"画中画视频已经完成预加载，此时点击开启画中画按钮，可快速开启系统画中画");
 }
 
 #pragma mark - Notification
 
 - (void)registerMessageNotification {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(playEndNotification:) name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    // 进入后台
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackgroundNotify:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    // 程序激活
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(appDidBecomeActiveNotify:) name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)removeMessageNotification {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:AVPlayerItemDidPlayToEndTimeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidBecomeActiveNotification object:nil];
 }
 
 - (void)playEndNotification:(NSNotification *)notif {
@@ -278,9 +331,21 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
     if (notif.object != self.player.currentItem) return;
     
     // 重新开启播放
-    [self.player seekToTime:(CMTimeMake(0.0f, 60)) completionHandler:^(BOOL finished) {
-        [self.player play];
+    [self.player seekToTime:(CMTimeMake(0.0f, self.player.currentItem.asset.duration.timescale)) completionHandler:^(BOOL finished) {
+        [self didClickPlayBtn:nil];
     }];
+}
+
+/// 进入后台
+- (void)didEnterBackgroundNotify:(NSNotification *)notify {
+    /// @warning AVPlayer 在播放视频时，会将图像渲染在 layer 上，因此只要取消图像的渲染，只播放音频，就可以实现后台播放。
+    self.playerLayer.player = nil;
+}
+
+/// 程序激活
+- (void)appDidBecomeActiveNotify:(NSNotification *)notify {
+    // 将player绑定在图像渲染layer上
+    self.playerLayer.player = self.player;
 }
 
 #pragma mark - Setter & Getter
@@ -330,7 +395,9 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
                 self.duration = CMTimeGetSeconds(videoItem.duration);
                 NSLog(@"video duration = %f", self.duration);
                 // 播放视频
-                [self.player play];
+                [self didClickPlayBtn:nil];
+                // 视频播放后，触发画中画预加载功能,缩短画中画的开启时间
+                [self.videoPip preloadVideo:self.videoUrl];
             }
                 break;
             case AVPlayerItemStatusFailed: {
@@ -340,6 +407,7 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
             default:
                 break;
         }
+        [self hideIndicatorView];
     }
 }
 
