@@ -277,10 +277,12 @@ typedef NS_ENUM(NSInteger, YZVideoBoolValue) {
         }];
         // 将页面push到导航控制视图中
         [self.naviController pushViewController:self animated:YES];
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.25f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.15f * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
             completionHandler(YES);
         });
+        return;
     }
+    
     completionHandler(YES);
 }
 

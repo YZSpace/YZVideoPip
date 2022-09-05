@@ -96,7 +96,7 @@ typedef NS_ENUM(NSInteger, YZVideoPipErrorCode) {
 + (YZVideoPipErrorCode)checkSupportedPipErrorCode;
 
 /// 通过视频URL初始化视频画中画开启对象
-/// @param layer 画中画依赖的播放容器层
+/// @param layer 画中画依赖的播放容器层，建议layer有其他视图层，以便遮挡画中画playerLayer
 /// @param delegate 画中画代理
 - (instancetype)initWithContainterLayer:(CALayer *)layer withPipDelegate:(id <YZVideoPipControllerDelegate>)delegate;
 

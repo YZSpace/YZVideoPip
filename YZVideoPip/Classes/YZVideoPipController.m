@@ -253,7 +253,11 @@
     if ([self callSupportedPipError] == YES) return;
     
     // 添加视频播放层
-    [layer addSublayer:self.playerLayer];
+    //  1.播放容器层有子视图时，将画中画视频层插入到最下层
+    //  2.此时可以看到画中画在开启&关闭时，过渡动画是由容器层 to 画中画弹层的联动
+    self.playerLayer.frame = layer.bounds;
+    [layer insertSublayer:self.playerLayer atIndex:0];
+    
     // 创建播放器
     self.player = [[AVPlayer alloc] init];
     // 设置播放层的播放器
@@ -466,6 +470,8 @@
 - (void)pictureInPictureController:(AVPictureInPictureController *)pictureInPictureController restoreUserInterfaceForPictureInPictureStopWithCompletionHandler:(void (^)(BOOL restored))completionHandler {
     // 关闭画中画且恢复播放界面
     [self updateVideoPipStatus:YZVideoPipStatusRestore];
+    // 停止播放
+    [self.player pause];
     
     if (self.delegate != nil && [self.delegate respondsToSelector:@selector(videoRestorePip:withCompletionHandler:)]) {
         [self.delegate videoRestorePip:self withCompletionHandler:completionHandler];
@@ -548,11 +554,7 @@
 - (AVPlayerLayer *)playerLayer {
     if (_playerLayer == nil) {
         _playerLayer = [AVPlayerLayer layer];
-        // 把画中画播放层移出屏幕外，使其肉眼不可见
-        CGRect frame = [UIScreen mainScreen].bounds;
-        frame.origin.x = -(MAX(frame.size.width, frame.size.height));
-        _playerLayer.frame = frame;
-        _playerLayer.backgroundColor = [UIColor clearColor].CGColor;
+        _playerLayer.backgroundColor = [UIColor blackColor].CGColor;
         _playerLayer.videoGravity = AVLayerVideoGravityResizeAspect;
     }
     
