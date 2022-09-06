@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YZVideoPip'
-  s.version          = '0.1.0'
+  s.version          = '1.0.0'
   s.summary          = 'video pip'
 
 # This description is used to generate tags and improve search results.
@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
 AVPlayer Video Picture In Picture Controller
                        DESC
 
-  s.homepage         = 'https://github.com/zone1026/YZVideoPip'
+  s.homepage         = 'https://github.com/YZSpace/YZVideoPip'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'zone1026' => '1024105345@qq.com' }
-  s.source           = { :git => 'https://github.com/zone1026/YZVideoPip.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/YZSpace/YZVideoPip.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
