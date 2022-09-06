@@ -98,7 +98,7 @@
     }
     
     // 视频URL为空
-    if (videoUrl == nil) {
+    if (videoUrl == nil || videoUrl.absoluteString.length <= 0) {
         [self startPipError:YZVideoPipErrorCodeEmptyVideoUrl withErrorMessage:@"start pip video url is empty"];
         return;
     }
@@ -158,7 +158,7 @@
     if ([self checkSamePlayerVideoUrl:videoUrl] == YES) return;
     
     // 视频URL为空，无法处理预加载
-    if (videoUrl == nil) {
+    if (videoUrl == nil || videoUrl.absoluteString.length <= 0) {
         [self startPipError:YZVideoPipErrorCodeEmptyVideoUrl withErrorMessage:@"preload pip video url is empty"];
         return;
     }
